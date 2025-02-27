@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://ryanmendez.org
+url: https://adwin2.github.io
 date_format: "ordinal"
 title: Ryan Mendez
 subtitle: "Entelechy"
@@ -13,7 +13,7 @@ encoding: "utf-8"
 # 页面左下角显示的年份
 since: 2025
 # 源码仓库，请替换成自己的
-repository: Adwin2/ryanmendez.github.io
+repository: Adwin2/adwin2.github.io
 # 对 css 和 js 资源的 cdn 加速配置
 cdn:
     jsdelivr:
@@ -181,7 +181,7 @@ utterances:
     repo: 
 # beaudar 配置参考：https://beaudar.lipk.org/
 beaudar:
-    repo: Adwin2/ryanmendez.github.io
+    repo: Adwin2/adwin2.github.io
 # giscus 配置参考：https://giscus.app/zh-CN
 giscus:
     repo: 
