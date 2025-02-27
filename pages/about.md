@@ -10,3 +10,9 @@ permalink: /about/
 Entelechy
 ## 联系
 
+Skill Keywords
+{% for skill in site.data.skills %}
+
+{{ skill.name }}
+{% for keyword in skill.keywords %} {{ keyword }} {% endfor %}
+{% endfor %}
