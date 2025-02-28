@@ -1,18 +1,23 @@
 ---
 layout: page
 title: About
-description: 打码改变世界
+description: 热爱所以坚持
 keywords: Ryan Mendez
 comments: true
 menu: 关于
 permalink: /about/
 ---
-Entelechy
+Ryan Mendez
+
+永远秉持主体性
 ## 联系
 
-Skill Keywords
+## Skill Keywords
 {% for skill in site.data.skills %}
-
-{{ skill.name }}
-{% for keyword in skill.keywords %} {{ keyword }} {% endfor %}
+### {{ skill.name }}
+<div class="btn-inline">
+{% for keyword in skill.keywords %}
+<button class="btn btn-outline" type="button">{{ keyword }}</button>
+{% endfor %}
+</div>
 {% endfor %}
