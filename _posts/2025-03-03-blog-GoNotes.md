@@ -2,7 +2,7 @@
 layout: post
 title: 50 Shades of Go
 categories: Go
-description: Go初学者常见的50个问题。(Edited)
+description: Go初学者常见的50个问题。Edited
 keywords: Golang, Go
 ---
 
@@ -22,6 +22,7 @@ keywords: Golang, Go
 8. map使用make分配内存时可指定capacity，但不可使用cap函数
 9. 数组用于函数传参时是值传递，只有**map，slice，channel，指针**是引用传递
 
+{% raw %}
     ```go
     x := [3]int{1, 2, 3}
 
@@ -31,11 +32,13 @@ keywords: Golang, Go
     }(&x)
     fmt.Println(x) // [7, 2, 3]
     ```
+{% endraw %}
 
 10. `range`返回键值对， 默认 索引 + 值
 11. `map[key]`始终有返回值，默认0
 12. 字符串不可变
 
+{% raw %}
     ```go
     x := "text"
 
@@ -44,13 +47,16 @@ keywords: Golang, Go
 
     fmt.Println(string(xbytes))
     ```
+{% endraw %}
 
 13. 字符串与[]byte 之间的转换是复制（内存损耗），可用`map[string][]byte` 建立字符串与[]byte的映射，也可range来**避免内存分配**，提高性能
 
+{% raw %}
     ```go
     for i, v := range []byte(str) { ...
     }
     ```
+{% endraw %}
 
 14. string 索引操作返回的是byte(或uint8)，获取字符可用for range，也可使用`unicode/utf8`和`golang.org/x/exp/utf8string`包的`At()`方法
 15. `len(str)`返回的是字符串的字节数，获取字符串的rune数通过`unicode/utf8.RuneCountInString()`函数，注意有些字符由多个rune组成(如é是两个rune组成)。
@@ -59,6 +65,7 @@ keywords: Golang, Go
 18. `for .. range ..` 以rune类型遍历string。for range总是尝试将字符串解析成utf8的文本，对于它无法解析的字节，它会返回**oxfffd**的rune字符。因此，任何**包含非utf8**的文本，一定要先将其转换成字符切片([]byte)。
     > 一个字符，也可以有多个rune组成。需要处理字符，尽量使用`golang.org/x/text/unicode/norm`包。
 
+{% raw %}
     ```go
     data := "A\xfe\x02\xff\x04"
     for _,v := range data {
@@ -72,6 +79,7 @@ keywords: Golang, Go
     }
     //prints: 0x41 0xfe 0x2 0xff 0x4 (good)
     ```
+{% endraw %}
 
 19. 使用`for .. range ..`遍历map 每次顺序是随机的。
 20. switch case匹配规则：匹配条件后默认退出，除非使用`fallthrough`继续匹配；不同于其他语言依赖break退出。
@@ -82,11 +90,13 @@ keywords: Golang, Go
 25. 主程序结束即退出。可通过channel实现主协程等待goroutine完成。（或sync.WaitGroup）
 26. 无缓存channel的阻塞问题
 
+{% raw %}
     ```go
     ch := make(chan int)
 
     var ch chan int // 此时channel值为 nil 同样会永远阻塞
     ```
+{% endraw %}
 
 27. 从closed的channel读取数据是安全的，可通过返回值的第二个参数判断是否关闭。而向closed写channel会导致panic
 28. 方法接收者是指针类型（*T），是对原对象的引用，方法中对其修改就是对原对象修改。 否则只是值复制。
@@ -97,6 +107,7 @@ keywords: Golang, Go
 1. 关闭HTTP的Response.Body
    使用defer语句关闭资源时要注意nil值，在defer语句之前要进行nil值处理
 
+{% raw %}
     ```go
     package main
 
@@ -127,10 +138,11 @@ keywords: Golang, Go
         fmt.Println(string(body))
     }
     ```
+{% endraw %}
 
     > 在Go 1.5之前resp.Body.Close()会读取并丢失body中的数据，保证在启用keepaliva的http时能够在下一次请求时重用。
     在Go 1.5之后，就需要在关闭前手动处理。
-    _, err = io.Copy(ioutil.Discard, resp.Body)  
+    _, err = io.Copy(ioutil.Discard, resp.Body)
     如果只是读取Body的部分，就很有必要在关闭Body之前做这种手动处理。例如处理json api响应时json.NewDecoder(resp.Body).Decode(&data)就需要处理掉剩余的数据。
 
 2. 关闭HTTP连接：
@@ -147,6 +159,7 @@ keywords: Golang, Go
 6. 在Slice、Array、Map的`for .. range ..`子句中修改和引用数据项
    使用range获取的数据是从集合元素中复制过来的，并非原始数据（语法糖），但使用索引可以访问原始数据
 
+{% raw %}
     ```go
     data := []int{1,2,3}
     for _, v := range data {
@@ -164,6 +177,7 @@ keywords: Golang, Go
     }
     fmt.Println(*data3[0], *data3[1], *data3[2])
     ```
+{% endraw %}
 
 7. Slice中的隐藏数据
    从Slice上生成切片新的Slice，新slice会直接引用原始数组，两个slice对同一数组的操作会相互影响。可通过手动分配空间来避免相互影响。
@@ -172,6 +186,7 @@ keywords: Golang, Go
     slice使用append添加的内容时超出capicity时，会重新分配空间。
     利用这一点，将要修改的切片指定capicity为切片当前length，可避免切片之间的超范围覆盖影响。
 
+{% raw %}
    ```go
     path := []byte("AAAA/BBBBBBBBB")
     sepIndex := bytes.IndexByte(path,'/') //bytes.IndexByte(str, char)
@@ -188,8 +203,9 @@ keywords: Golang, Go
     fmt.Println("dir1 =>",string(dir1)) //prints: dir1 => AAAAsuffix
     fmt.Println("dir2 =>",string(dir2)) //prints: dir2 => uffixBBBB (not ok)
 
-    fmt.Println("new path =>",string(path))   
+    fmt.Println("new path =>",string(path)) 
    ```
+{% endraw %}
 
 9. Slice增加元素重新分配内存导致的怪事
    slice在添加元素前，与其它切片共享同一数据区域，修改会相互影响；但添加元素导致内存重新分配之后，不再指向原来的数据区域，修改元素，不再影响其它切片。
@@ -203,6 +219,7 @@ keywords: Golang, Go
 
     return当然也是可以的，如果在这里可以用的话。
 
+{% raw %}
     ```go
     //Go语言中默认的break语句只能终止当前最内层的switch/select代码块，无法直接跳出外层的for循环。例如：
 
@@ -239,16 +256,18 @@ keywords: Golang, Go
         // 后续代码不会执行
     }
     ```
+{% endraw %}
 
 12. 在for迭代过程中，迭代变量会一直保留，只是每次迭代值不一样。
     因此在for循环中在闭包里直接引用迭代变量，在执行时直接取迭代变量的值，而不是闭包所在迭代的变量值。
 
     如果闭包要取所在迭代变量的值，就需要for中定义一个变量来保存所在迭代的值，或者通过闭包函数传参。
 
+{% raw %}
     ```go
     package main
 
-    import (  
+    import (
         "fmt"
         "time"
     )
@@ -279,30 +298,32 @@ keywords: Golang, Go
         time.Sleep(3 * time.Second)    //goroutines print: one, two, three
     }
 
-    func main() {  
+    func main() {
         forState1()
     }
     ```
+{% endraw %}
 
     再看一个例子：
 
+{% raw %}
     ```go
     package main
 
-    import (  
+    import (
         "fmt"
         "time"
     )
 
-    type field struct {  
+    type field struct {
         name string
     }
 
-    func (p *field) print() {  
+    func (p *field) print() {
         fmt.Println(p.name)
     }
 
-    func main() {  
+    func main() {
         data := []field{{"one"},{"two"},{"three"}}
         for _,v := range data {
             // 解决办法：添加如下语句
@@ -318,11 +339,13 @@ keywords: Golang, Go
         time.Sleep(3 * time.Second)     //goroutines print: one, two, three
     }
     ```
+{% endraw %}
 
 13. defer函数调用参数
 defer后不论函数还是方法，输入参数的值在defer声明时已计算好
 要特别注意的是，defer后面是方法调用语句时，方法的接受者是在**defer语句执行时**传递的，而不是defer声明时传入的。
 
+{% raw %}
     ```go
         type field struct{
             num int
@@ -345,10 +368,12 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
             // result => 2 (not ok if you expected 4)
         }
     ```
+{% endraw %}
 
 14. defer在当前函数结束后调用，与变量的作用范围无关
 15. 类型断言失败时会返回T类型的“0值”，而不是变量原始值。
 
+{% raw %}
     ```go
     var data interface{} = "great"
 
@@ -364,11 +389,13 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
         fmt.Println("[not an int] value =>",data)         //prints: [not an int] value => great (as expected)
     }
     ```
+{% endraw %}
 
 16. 阻塞的goroutine与资源泄露
 
+{% raw %}
     ```go
-    func First(query string, replicas ...Search) Result {  
+    func First(query string, replicas ...Search) Result {
         c := make(chan Result)
         // 解决1：使用缓冲的channel： c := make(chan Result,len(replicas))
         searchReplica := func(i int) { c <- replicas[i](query) }
@@ -394,6 +421,7 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
         return <-c
     }
     ```
+{% endraw %}
 
 ## 高级
 
@@ -403,21 +431,22 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
 
     但是，并不是所有变量都是可寻址的，像Map的元素就是不可寻址的。
 
+{% raw %}
     ```go
     package main
     import "fmt"
-    type data struct {  
+    type data struct {
         name string
     }
-    func (p *data) print() {  
+    func (p *data) print() {
         fmt.Println("name:",p.name)
     }
 
-    type printer interface {  
+    type printer interface {
         print()
     }
 
-    func main() {  
+    func main() {
         d1 := data{"one"}
         d1.print() //ok
 
@@ -431,19 +460,21 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
         d2.print()      // ok
     }
     ```
+{% endraw %}
 
 2. 原理同上一条
    如果map的值类型是结构体类型，那么不能更新从map中取出的结构体的字段值。
    但是对于结构体类型的slice却是可以的。
 
+{% raw %}
     ```go
     package main
 
-    type data struct {  
+    type data struct {
         name string
     }
 
-    func main() {  
+    func main() {
         m := map[string]data {"x":{"one"}}
         //m["x"].name = "two" //error
         r := m["x"]
@@ -459,6 +490,7 @@ defer后不论函数还是方法，输入参数的值在defer声明时已计算�
         fmt.Println(s)       // prints: [{two}]
     }
     ```
+{% endraw %}
 
 3. nil值的interface{}不等于nil interface ： (Type, Value)
 4. 变量内存的分配
