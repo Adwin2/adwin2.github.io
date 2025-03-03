@@ -2,14 +2,8 @@
 layout: post
 title: 50 Shades of Go
 categories: Go
-description: Go初学者常见的50个问题(Edited)
+description: Go初学者常见的50个问题。(Edited)
 keywords: Golang, Go
-mermaid: false
-sequence: false
-flow: false
-mathjax: false
-mindmap: false
-mindmap2: false
 ---
 
 # 50 Shades of Go : Traps, Gotchas, and Cpmmon Mistakes for New Golang Devs
