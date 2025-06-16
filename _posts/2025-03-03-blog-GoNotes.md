@@ -209,6 +209,21 @@ keywords: Golang, Go
 
 9. Slice增加元素重新分配内存导致的怪事
    slice在添加元素前，与其它切片共享同一数据区域，修改会相互影响；但添加元素导致内存重新分配之后，不再指向原来的数据区域，修改元素，不再影响其它切片。
+   > 拓展： 在函数参数传入切片时，为避免外界数据更改影响传入数据：
+
+{% raw %}
+    ```go
+    func (sm *StringMap) Set(key string, value []byte) {
+        sm.mu.Lock()
+        defer sm.mu.Unlock()
+        // 创建值的拷贝，以避免外界数据更改的影响
+        valCopy := make([]byte, len(value))
+        copy(valCopy, value)
+        sm.m[key] = valCopy
+    }
+    ```
+{% endraw %}
+
 10. 类型重定义与方法继承
     从一个已存在的(non-interface)非接口类型重新定义一个新类型时，不会继承原类型的任何方法。
     可以通过定义一个组合匿名变量的类型，来实现对此匿名变量类型的继承。（类似适配器模式）
