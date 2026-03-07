@@ -6,7 +6,7 @@ description: Go初学者常见的50个问题。Edited
 keywords: Golang, Go
 ---
 
-# 50 Shades of Go : Traps, Gotchas, and Cpmmon Mistakes for New Golang Devs
+# 50 Shades of Go : Traps, Gotchas, and Common Mistakes for New Golang Devs
 
 ( **Edited!** )
 

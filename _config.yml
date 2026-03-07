@@ -5,9 +5,9 @@ baseurl:
 url: https://adwin2.github.io
 date_format: "ordinal"
 title: Ryan Mendez
-subtitle: "Entelechy"
-description: "Ryan Mendez的个人博客"
-keywords: 
+subtitle: "Backend Engineer | Go, C++, Python"
+description: "Ryan Mendez - Backend Engineer | Golang, C++, Python"
+keywords: "Ryan Mendez, Backend Engineer, Golang, C++, Python"
 timezone: Asia/Shanghai
 encoding: "utf-8"
 # 页面左下角显示的年份
@@ -85,14 +85,6 @@ navs:
     href: /open-source/
     label: 开源
     mobile-hidden: true
-
-  -
-    href: /fragments/
-    label: 片段
-
-  -
-    href: /wiki/
-    label: 维基
 
   -
     href: /links/
@@ -206,7 +198,7 @@ simple_jekyll_search:
 google:
     analytics_id: # G-20FLEG5Q2W
     adsense:
-        enabled: true
+        enabled: false
         footer: true
         sidebar: true
         sidebar-detail: true

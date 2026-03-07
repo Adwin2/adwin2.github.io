@@ -1,5 +1,15 @@
-# Ryan Mendez
+# adwin2.github.io
 
-我的个人博客：<adwin2.github.io>，欢迎 Star 和 Fork。
+Personal blog and portfolio for **Ryan Mendez**, a backend engineer based in Taiyuan, China.
 
-## 概览
+Built with [Jekyll](https://jekyllrb.com/) and hosted on [GitHub Pages](https://pages.github.com/).
+
+## Tech Stack
+
+- Jekyll (static site generator)
+- GitHub Pages (hosting)
+- Primer CSS (styling)
+
+## Visit
+
+[https://adwin2.github.io](https://adwin2.github.io)

@@ -1,6 +1,30 @@
-- name: Backend Engineer Keywords
+- name: 编程语言
   keywords:
-      - Golang
-      - C++
-      - Python
-      - Design Patterns
+    - Golang
+    - C++
+    - Python
+    - SQL
+
+- name: 后端 & 系统
+  keywords:
+    - RESTful APIs
+    - gRPC
+    - 并发编程
+    - 分布式系统
+    - 数据库设计
+    - Linux
+
+- name: 工具 & 实践
+  keywords:
+    - Git
+    - Docker
+    - CI/CD
+    - 设计模式
+    - 单元测试
+
+- name: 计算机基础
+  keywords:
+    - 数据结构
+    - 算法
+    - 操作系统
+    - 计算机网络
