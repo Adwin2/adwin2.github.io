@@ -2,7 +2,7 @@
 layout: post
 title: Go 并发编程实战：从 goroutine 泄漏到优雅退出
 categories: Go
-description: 工作中踩过的 Go 并发坑，以及生产环境中真正好用的并发模式。
+description: 实习和自学过程中踩过的 Go 并发坑，整理出一些实用的并发模式。
 keywords: Golang, goroutine, concurrency, channel, context, errgroup
 mermaid: false
 sequence: false
@@ -39,7 +39,7 @@ func process(ctx context.Context) {
 ch := make(chan result, 1) // 缓冲区为 1
 ```
 
-这样即使没人读，goroutine 也能写入后退出。这个问题在线上表现为内存缓慢增长，pprof 一看几千个 goroutine 卡在 channel send。
+这样即使没人读，goroutine 也能写入后退出。这个问题表现为内存缓慢增长，pprof 一看几千个 goroutine 卡在 channel send。
 
 还有一种更隐蔽的泄漏——往已关闭的 HTTP 连接写响应：
 
@@ -57,7 +57,7 @@ go func() {
 }()
 ```
 
-**经验：上线前一定跑 `goleak` 检测。**
+**经验：跑测试前一定用 `goleak` 检测。**
 
 ```go
 func TestMain(m *testing.M) {
@@ -238,7 +238,7 @@ func (c *SafeCache) Set(key string, item *CacheItem) {
 
 ## 六、优雅退出
 
-生产环境的服务不能直接 kill，需要处理完正在进行的请求再退出：
+实际的服务不能直接 kill，需要处理完正在进行的请求再退出：
 
 ```go
 func main() {

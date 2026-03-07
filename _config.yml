@@ -5,9 +5,9 @@ baseurl:
 url: https://adwin2.github.io
 date_format: "ordinal"
 title: Ryan Mendez
-subtitle: "Backend Engineer | Go, C++, Python"
-description: "Ryan Mendez - Backend Engineer | Golang, C++, Python"
-keywords: "Ryan Mendez, Backend Engineer, Golang, C++, Python"
+subtitle: "CS Junior | Go Backend Intern @ Baidu"
+description: "Ryan Mendez - CS 在校生，Go 后端方向，前百度实习"
+keywords: "Ryan Mendez, Golang, Backend, Intern, Baidu, C++, Python"
 timezone: Asia/Shanghai
 encoding: "utf-8"
 # 页面左下角显示的年份

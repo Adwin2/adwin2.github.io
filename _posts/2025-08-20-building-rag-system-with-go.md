@@ -2,7 +2,7 @@
 layout: post
 title: 用 Go 构建 RAG 系统：从文档到回答的工程实践
 categories: [Go, AI]
-description: 记录用 Go 实现一个生产可用的 RAG 系统的完整过程，包括文档切分、向量检索、Prompt 工程和效果优化。
+description: 学习 RAG 的过程中用 Go 做了个完整的 demo，记录文档切分、向量检索、Prompt 工程的学习笔记。
 keywords: RAG, Golang, LLM, 向量检索, Embedding, Milvus
 mermaid: false
 sequence: false
@@ -12,13 +12,13 @@ mindmap: false
 mindmap2: false
 ---
 
-最近的项目需要做一个内部知识库问答系统，技术方案选了 RAG（Retrieval-Augmented Generation）。团队主语言是 Go，所以整套系统都用 Go 实现。踩了不少坑，这里做个记录。
+最近在学 RAG（Retrieval-Augmented Generation），动手用 Go 写了一个知识库问答的 demo 项目。从文档解析到向量检索到 LLM 生成，完整跑通了一遍，踩了不少坑，这里做个记录。
 
 ## 整体架构
 
 RAG 的核心思路不复杂：用户提问 → 检索相关文档 → 把文档和问题一起丢给 LLM 生成回答。但工程化后每一步都有细节。
 
-我们的系统分成两条链路：
+我的 demo 分成两条链路：
 
 **离线链路（索引构建）：**
 1. 文档采集（内部 Wiki、Confluence、飞书文档）
@@ -125,7 +125,7 @@ type Chunk struct {
 | 512 tokens | 综合最优 | 大多数场景 |
 | 1024 tokens | 上下文充分但检索噪声大 | 流程文档、长篇分析 |
 
-我们最终用 512 tokens + 64 tokens overlap。
+最终用 512 tokens + 64 tokens overlap。
 
 ## Embedding 选择
 
@@ -173,12 +173,12 @@ func (c *EmbeddingClient) Embed(ctx context.Context, texts []string) ([][]float3
 }
 ```
 
-**批量 Embedding 的坑：** 一次发太多文本会 OOM（embedding 模型那边），我们控制在每批 32 条，用 errgroup 并发 4 个批次。
+**批量 Embedding 的坑：** 一次发太多文本会 OOM（embedding 模型那边），所以控制在每批 32 条，用 errgroup 并发 4 个批次。
 
 ## 向量数据库：Milvus
 
 选 Milvus 主要因为：
-1. 开源，团队可控
+1. 开源，自己能掌控
 2. Go SDK 成熟
 3. 支持标量过滤（可以按文档来源、时间等字段过滤）
 
@@ -221,7 +221,7 @@ func (s *VectorStore) Search(ctx context.Context, query []float32, topK int, fil
 
 ### 混合检索
 
-纯向量检索对关键词类 query 效果差（比如搜错误码 "ERR_10042"，语义匹配完全不行）。我们加了 BM25 关键词检索做混合：
+纯向量检索对关键词类 query 效果差（比如搜错误码 "ERR_10042"，语义匹配完全不行）。于是加了 BM25 关键词检索做混合：
 
 ```go
 func (s *HybridSearcher) Search(ctx context.Context, query string, topK int) ([]SearchResult, error) {
@@ -275,7 +275,7 @@ func reciprocalRankFusion(results ...[]SearchResult, topK int) []SearchResult {
 }
 ```
 
-混合检索上线后，在我们的测试集上 Recall@10 从 0.72 提升到 0.85。
+混合检索加上后，在测试集上 Recall@10 从 0.72 提升到 0.85。
 
 ## Prompt 工程
 
@@ -317,7 +317,7 @@ const promptTemplate = `你是一个内部知识库助手。请根据提供的�
 
 ### 1. Query 改写
 
-用户的提问经常很口语化。"上次那个部署报错咋整" → 向量检索效果很差。我们加了一步 query 改写，用 LLM 把口语化 query 转成检索友好的形式：
+用户的提问经常很口语化。"上次那个部署报错咋整" → 向量检索效果很差。可以加一步 query 改写，用 LLM 把口语化 query 转成检索友好的形式：
 
 ```
 原始 query: 上次那个部署报错咋整
@@ -328,7 +328,7 @@ const promptTemplate = `你是一个内部知识库助手。请根据提供的�
 
 ### 2. Rerank 重排序
 
-向量检索的 Top-20 用 rerank 模型精排到 Top-5。我们用的 BCE-reranker，效果比直接取 Top-5 好很多，尤其是当 query 比较长或者比较模糊的时候。
+向量检索的 Top-20 用 rerank 模型精排到 Top-5。试了 BCE-reranker，效果比直接取 Top-5 好很多，尤其是当 query 比较长或者比较模糊的时候。
 
 ### 3. 不要把太多文档塞进 Prompt
 

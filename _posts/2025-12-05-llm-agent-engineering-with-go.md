@@ -2,7 +2,7 @@
 layout: post
 title: LLM Agent 工程实践：用 Go 实现 ReAct 模式的工具调用 Agent
 categories: [Go, AI]
-description: 从零实现一个支持工具调用的 LLM Agent，包括 ReAct 循环、工具注册、多轮对话和错误恢复。
+description: 学习 LLM Agent 原理后用 Go 实现了一个支持工具调用的 demo，整理 ReAct 循环、工具注册等核心概念。
 keywords: LLM, Agent, ReAct, Tool Calling, Golang
 mermaid: false
 sequence: false
@@ -12,7 +12,7 @@ mindmap: false
 mindmap2: false
 ---
 
-上一篇写了 RAG 系统，RAG 解决了"基于知识回答问题"，但很多场景需要 Agent 真正去**执行操作**——查数据库、调接口、读文件。这篇记录如何用 Go 实现一个生产级别的 LLM Agent。
+上一篇学了 RAG，RAG 解决了"基于知识回答问题"，但很多场景需要 Agent 真正去**执行操作**——查数据库、调接口、读文件。这篇记录学习 ReAct 模式后用 Go 实现一个工具调用 Agent 的过程。
 
 ## 什么是 ReAct
 
@@ -319,7 +319,7 @@ func (a *Agent) trimMessages(messages []Message) []Message {
 
 ## 可观测性
 
-生产环境必须有日志和 trace，否则出了问题完全没法排查：
+如果要上线，日志和 trace 是必须的，否则出了问题完全没法排查：
 
 ```go
 func (a *Agent) Run(ctx context.Context, userMessage string) (string, error) {
@@ -353,11 +353,11 @@ func (a *Agent) Run(ctx context.Context, userMessage string) (string, error) {
 }
 ```
 
-每次 LLM 调用和工具执行都记录下来，线上排查问题时能还原完整的推理链路。
+每次 LLM 调用和工具执行都记录下来，排查问题时能还原完整的推理链路。
 
 ## 整体架构
 
-最终我们的 Agent 服务结构：
+如果要做成完整的服务，可以按这个结构组织：
 
 ```
 HTTP/gRPC API
