@@ -407,6 +407,7 @@ func numIslands(grid [][]byte) int {
 
 多源 BFS，所有腐烂橘子同时入队。
 
+{% raw %}
 ```go
 func orangesRotting(grid [][]int) int {
     m, n := len(grid), len(grid[0])
@@ -449,6 +450,7 @@ func orangesRotting(grid [][]int) int {
 }
 // 时间 O(m*n)，空间 O(m*n)
 ```
+{% endraw %}
 
 ### 207. 课程表
 
