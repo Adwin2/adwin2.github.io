@@ -5,9 +5,9 @@ baseurl:
 url: https://adwin2.github.io
 date_format: "ordinal"
 title: Ryan Mendez
-subtitle: "CS Junior | Go Backend Intern @ Baidu"
-description: "Ryan Mendez - CS 在校生，Go 后端方向，前百度实习"
-keywords: "Ryan Mendez, Golang, Backend, Intern, Baidu, C++, Python"
+subtitle: "CS Junior | Go Backend Intern @ Baidu · AI Agent Engineering"
+description: "Ryan Mendez - 2027届本科生，Go 后端 / AI Agent 工程方向，百度 MEG 实习，关注 AI 落地与创业思考"
+keywords: "Ryan Mendez, Golang, Backend, AI Agent, LLM, FDE, Baidu, C++, Python"
 timezone: Asia/Shanghai
 encoding: "utf-8"
 # 页面左下角显示的年份
@@ -17,7 +17,7 @@ repository: Adwin2/adwin2.github.io
 # 对 css 和 js 资源的 cdn 加速配置
 cdn:
     jsdelivr:
-        enabled: false
+        enabled: true
 # 可选组件配置
 components:
     # 分享
@@ -27,7 +27,7 @@ components:
         hide-platforms: qq,facebook
     # 不蒜子访问统计
     busuanzi:
-        enabled: false
+        enabled: true
         start_date: 2020-05-03
     # My Popular Repositories
     side_bar_repo:
